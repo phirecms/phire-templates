@@ -16,7 +16,7 @@ class Template extends Form
      * @param  array  $fields
      * @param  string $action
      * @param  string $method
-     * @return Media
+     * @return Template
      */
     public function __construct(array $fields, $action = null, $method = 'post')
     {

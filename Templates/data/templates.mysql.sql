@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `[{prefix}]templates` (
   INDEX `template_parent_id` (`parent_id`),
   INDEX `template_name` (`name`),
   CONSTRAINT `fk_template_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `[{prefix}]templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9001
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9001;
 
 -- --------------------------------------------------------
 

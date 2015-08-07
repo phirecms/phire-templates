@@ -4,7 +4,7 @@ namespace Templates\Event;
 
 use Templates\Table;
 use Pop\Application;
-use Phire\Controller\AbstractController
+use Phire\Controller\AbstractController;
 
 class Template
 {

@@ -43,9 +43,9 @@ return [
                 'type'  => 'textarea',
                 'label' => 'Template',
                 'attributes' => [
-                    'rows'  => 20,
+                    'rows'  => 30,
                     'cols'  => 80,
-                    'style' => 'width: 99.5%'
+                    'style' => 'width: 100%'
                 ]
             ]
         ]

@@ -6,7 +6,7 @@ return [
             'controller' => 'Templates\Controller\IndexController',
             'action'     => 'index',
             'acl'        => [
-                'resource'   => 'template',
+                'resource'   => 'templates',
                 'permission' => 'index'
             ]
         ],
@@ -14,7 +14,7 @@ return [
             'controller' => 'Templates\Controller\IndexController',
             'action'     => 'add',
             'acl'        => [
-                'resource'   => 'template',
+                'resource'   => 'templates',
                 'permission' => 'add'
             ]
         ],
@@ -22,7 +22,7 @@ return [
             'controller' => 'Templates\Controller\IndexController',
             'action'     => 'edit',
             'acl'        => [
-                'resource'   => 'template',
+                'resource'   => 'templates',
                 'permission' => 'edit'
             ]
         ],
@@ -30,7 +30,7 @@ return [
             'controller' => 'Templates\Controller\IndexController',
             'action'     => 'remove',
             'acl'        => [
-                'resource'   => 'template',
+                'resource'   => 'templates',
                 'permission' => 'remove'
             ]
         ]

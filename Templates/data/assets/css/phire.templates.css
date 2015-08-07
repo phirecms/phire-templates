@@ -2,6 +2,48 @@
  * Templates Module Style Sheet for Phire CMS 2
  */
 
+#template-form {
+    margin: 10px auto 10px auto;
+    padding: 15px 0 15px 0;
+    width: 100%;
+    min-height: 460px;
+    border-top: solid 1px #ccc;
+}
+
+#template-form > dl:first-child {
+    margin: 0 0 0 20px;
+    padding: 0 0 0 20px;
+    width: 160px;
+    border-left: solid 1px #ccc;
+    float: right;
+    min-height: 460px;
+    height: 100%;
+}
+
+#template-form > dl:first-child > dt {
+    width: 100%;
+}
+
+#template-form > dl:first-child > dt {
+    margin: 0 0 5px 0;
+    border-bottom: dotted 1px #aaa;
+}
+
+#template-form-field-group-1 > dd:first-child, #template_parent_id, #device {
+    width: 160px;
+}
+
+#template-form-field-group-2 {
+    width: calc(100% - 220px);
+}
+
+
+#template-form-field-group-2 > dt, #template-form-field-group-2 > dd {
+    width: 98%;
+    padding-left: 4px;
+}
+
+
 .templates-nav-icon {
     background-image: url(../img/templates-icon-sm.png);
     background-position: 8px center;

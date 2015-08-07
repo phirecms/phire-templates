@@ -44,9 +44,14 @@ class Template extends AbstractModel
      */
     public function getById($id)
     {
-        $template = Table\TEmplates::findById($id);
+        $template = Table\Templates::findById($id);
         if (isset($template->id)) {
-            $this->data = array_merge($this->data, $template->getColumns());
+            $data = $template->getColumns();
+            $data['template_parent_id'] = $data['parent_id'];
+            $data['template_source']    = $data['template'];
+            unset($data['parent_id']);
+            unset($data['template']);
+            $this->data = array_merge($this->data, $data);
         }
     }
 
@@ -59,7 +64,7 @@ class Template extends AbstractModel
     public function save(array $fields)
     {
         $template = new Table\Templates([
-            'parent_id' => ((isset($fields['template_parent_id'] && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null),
+            'parent_id' => ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null),
             'name'      => $fields['name'],
             'device'    => $fields['device'],
             'template'  => $fields['template_source']
@@ -72,7 +77,6 @@ class Template extends AbstractModel
     /**
      * Update an existing template
      *
-     * @param  array $file
      * @param  array $fields
      * @return void
      */
@@ -81,7 +85,7 @@ class Template extends AbstractModel
         $template = Table\Templates::findById((int)$fields['id']);
         if (isset($template->id)) {
 
-            $template->parent_id = ((isset($fields['template_parent_id'] && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null);
+            $template->parent_id = ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null);
             $template->name      = $fields['name'];
             $template->device    = $fields['device'];
             $template->template  = $fields['template_source'];

@@ -33,7 +33,7 @@ class IndexController extends AbstractController
 
         $this->view->title     = 'Templates';
         $this->view->pages     = $pages;
-        $this->view->libraries = $templates->getAll(
+        $this->view->templates = $templates->getAll(
             $limit, $this->request->getQuery('page'), $this->request->getQuery('sort')
         );
 
@@ -51,7 +51,7 @@ class IndexController extends AbstractController
         $this->view->title = 'Templates : Add';
 
         $fields = $this->application->config()['forms']['Templates\Form\Template'];
-        $this->view->form = new Form\Media($fields);
+        $this->view->form = new Form\Template($fields);
 
         if ($this->request->isPost()) {
             $this->view->form->addFilter('htmlentities', [ENT_QUOTES, 'UTF-8'])
@@ -88,7 +88,7 @@ class IndexController extends AbstractController
 
         $this->prepareView('templates/edit.phtml');
         $this->view->title         = 'Templates';
-        $this->view->template_name = $media->title;
+        $this->view->template_name = $template->name;
 
         $fields = $this->application->config()['forms']['Templates\Form\Template'];
         $fields[1]['name']['attributes']['onkeyup'] = 'phire.changeTitle(this.value);';
