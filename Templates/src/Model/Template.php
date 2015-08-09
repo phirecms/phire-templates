@@ -138,7 +138,7 @@ class Template extends AbstractModel
             $newTemplate = new Table\Templates([
                 'parent_id' => $template->parent_id,
                 'name'      => $name,
-                'device'    => null,
+                'device'    => (null !== $template->parent_id) ? null : 'desktop',
                 'template'  => $template->template,
                 'history'   => $template->history
             ]);

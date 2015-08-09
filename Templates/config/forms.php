@@ -34,7 +34,8 @@ return [
                     'windows-tablet' => 'Windows Tablet',
                     'blackberry'     => 'Blackberry',
                     'palm'           => 'Palm'
-                ]
+                ],
+                'marked' => 'desktop'
             ],
             'id' => [
                 'type'  => 'hidden',
