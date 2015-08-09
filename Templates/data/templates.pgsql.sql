@@ -14,8 +14,9 @@ CREATE TABLE IF NOT EXISTS "[{prefix}]templates" (
   "id" integer NOT NULL DEFAULT nextval('template_id_seq'),
   "parent_id" integer,
   "name" varchar(255) NOT NULL,
-  "device" varchar(255) NOT NULL,
-  "template" text NOT NULL,
+  "device" varchar(255),
+  "template" text,
+  "history" text,
   PRIMARY KEY ("id"),
   CONSTRAINT "fk_template_parent_id" FOREIGN KEY ("parent_id") REFERENCES "[{prefix}]templates" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 ) ;

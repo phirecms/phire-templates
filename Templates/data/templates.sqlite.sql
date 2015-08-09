@@ -21,8 +21,9 @@ CREATE TABLE IF NOT EXISTS "[{prefix}]templates" (
   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   "parent_id" integer,
   "name" varchar NOT NULL,
-  "device" varchar NOT NULL,
-  "template" text NOT NULL,
+  "device" varchar,
+  "template" text,
+  "history" text,
   UNIQUE ("id"),
   CONSTRAINT "fk_template_parent_id" FOREIGN KEY ("parent_id") REFERENCES "[{prefix}]templates" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 ) ;

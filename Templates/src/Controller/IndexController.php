@@ -6,7 +6,6 @@ use Templates\Model;
 use Templates\Form;
 use Templates\Table;
 use Phire\Controller\AbstractController;
-use Pop\Paginator\Paginator;
 
 class IndexController extends AbstractController
 {
@@ -14,7 +13,6 @@ class IndexController extends AbstractController
     /**
      * Index action method
      *
-     * @param  int $lid
      * @return void
      */
     public function index()
@@ -22,20 +20,8 @@ class IndexController extends AbstractController
         $this->prepareView('templates/index.phtml');
         $templates = new Model\Template();
 
-        if ($templates->hasPages($this->config->pagination)) {
-            $limit = $this->config->pagination;
-            $pages = new Paginator($templates->getCount(), $limit);
-            $pages->useInput(true);
-        } else {
-            $limit = null;
-            $pages = null;
-        }
-
         $this->view->title     = 'Templates';
-        $this->view->pages     = $pages;
-        $this->view->templates = $templates->getAll(
-            $limit, $this->request->getQuery('page'), $this->request->getQuery('sort')
-        );
+        $this->view->templates = $templates->getAll($this->request->getQuery('sort'));
 
         $this->send();
     }
@@ -51,6 +37,12 @@ class IndexController extends AbstractController
         $this->view->title = 'Templates : Add';
 
         $fields = $this->application->config()['forms']['Templates\Form\Template'];
+
+        $templates = Table\Templates::findAll();
+        foreach ($templates->rows() as $tmpl) {
+            $fields[0]['template_parent_id']['value'][$tmpl->id] = $tmpl->name;
+        }
+
         $this->view->form = new Form\Template($fields);
 
         if ($this->request->isPost()) {
@@ -91,6 +83,32 @@ class IndexController extends AbstractController
         $this->view->template_name = $template->name;
 
         $fields = $this->application->config()['forms']['Templates\Form\Template'];
+
+        $templates = Table\Templates::findAll();
+        foreach ($templates->rows() as $tmpl) {
+            if ($tmpl->id != $id) {
+                $fields[0]['template_parent_id']['value'][$tmpl->id] = $tmpl->name;
+            }
+        }
+
+        if (null !== $template->history) {
+            $history = json_decode($template->history, true);
+            $fields[0]['template_history'] = [
+                'type'  => 'select',
+                'label' => 'Select Revision',
+                'value' => [
+                    '0' => '(Current)'
+                ],
+                'attributes' => [
+                    'onchange' => 'phire.changeTemplateHistory(this);'
+                ]
+            ];
+            krsort($history);
+            foreach ($history as $timestamp => $value) {
+                $fields[0]['template_history']['value'][$timestamp] = date('M j, Y H:i:s', $timestamp);
+            }
+        }
+
         $fields[1]['name']['attributes']['onkeyup'] = 'phire.changeTitle(this.value);';
 
         $this->view->form = new Form\Template($fields);
@@ -105,13 +123,56 @@ class IndexController extends AbstractController
                      ->addFilter('html_entity_decode', [ENT_QUOTES, 'UTF-8'])
                      ->filter();
                 $template = new Model\Template();
-                $template->update($this->view->form->getFields());
+
+                $template->update($this->view->form->getFields(), $this->application->module('Templates')->config()['history']);
                 $this->view->id = $template->id;
                 $this->redirect(BASE_PATH . APP_URI . '/templates/edit/'. $template->id . '?saved=' . time());
             }
         }
 
         $this->send();
+    }
+
+    /**
+     * Copy action method
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function copy($id)
+    {
+        $template = new Model\Template();
+        $template->getById($id);
+
+        if (!isset($template->id)) {
+            $this->redirect(BASE_PATH . APP_URI . '/$templates');
+        }
+
+        $template->copy($this->application->modules()->isRegistered('Fields'));
+        $this->redirect(BASE_PATH . APP_URI . '/templates?saved=' . time());
+    }
+
+    /**
+     * Json action method
+     *
+     * @param  int $id
+     * @param  int $marked
+     * @return void
+     */
+    public function json($id, $marked)
+    {
+        $json = [];
+
+        $template = Table\Templates::findById($id);
+        if (isset($template->id) && (null !== $template->history)) {
+            $history = json_decode($template->history, true);
+            if (isset($history[$marked])) {
+                $json['value'] = $history[$marked];
+            }
+        }
+
+        $this->response->setBody(json_encode($json, JSON_PRETTY_PRINT));
+        $this->send(200, ['Content-Type' => 'application/json']);
     }
 
     /**

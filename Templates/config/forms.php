@@ -21,7 +21,19 @@ return [
                 'type'  => 'select',
                 'label' => 'Device',
                 'value' => [
-                    'Desktop' => 'Desktop'
+                    '----'           => '----',
+                    'desktop'        => 'Desktop',
+                    'mobile'         => 'Any Mobile Device',
+                    'phone'          => 'Any Mobile Phone',
+                    'tablet'         => 'Any Mobile Tablet',
+                    'iphone'         => 'iPhone',
+                    'ipad'           => 'iPad',
+                    'android-phone'  => 'Android Phone',
+                    'android-tablet' => 'Android Tablet',
+                    'windows-phone'  => 'Windows Phone',
+                    'windows-tablet' => 'Windows Tablet',
+                    'blackberry'     => 'Blackberry',
+                    'palm'           => 'Palm'
                 ]
             ],
             'id' => [

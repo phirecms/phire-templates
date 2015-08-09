@@ -39,6 +39,7 @@ return [
                 'action'   => 'Templates\Event\Template::setTemplate',
                 'priority' => 1000
             ]
-        ]
+        ],
+        'history' => 10
     ]
 ];

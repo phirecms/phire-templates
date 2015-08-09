@@ -11,29 +11,26 @@ class Template extends AbstractModel
     /**
      * Get all templates
      *
-     * @param  int    $limit
-     * @param  int    $page
      * @param  string $sort
      * @return array
      */
-    public function getAll($limit = null, $page = null, $sort = null)
+    public function getAll($sort = null)
     {
-        $order = (null !== $sort) ? $this->getSortOrder($sort, $page) : 'id DESC';
+        $order = (null !== $sort) ? $this->getSortOrder($sort) : 'id ASC';
 
-        if (null !== $limit) {
-            $page = ((null !== $page) && ((int)$page > 1)) ?
-                ($page * $limit) - $limit : null;
+        $templatesAry = [];
+        $templates    = Table\Templates::findBy(['parent_id' => null], null, ['order' => $order]);
 
-            return Table\Templates::findAll(null, [
-                'offset' => $page,
-                'limit'  => $limit,
-                'order'  => $order
-            ])->rows();
-        } else {
-            return Table\Templates::findAll(null, [
-                'order'  => $order
-            ])->rows();
+        foreach ($templates->rows() as $template) {
+            $templatesAry[] = $template;
+            $children = Table\Templates::findBy(['parent_id' => $template->id], null, ['order' => $order]);
+            foreach ($children->rows() as $child) {
+                $child->name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt; ' . $child->name;
+                $templatesAry[] = $child;
+            }
         }
+
+        return $templatesAry;
     }
 
     /**
@@ -64,10 +61,12 @@ class Template extends AbstractModel
     public function save(array $fields)
     {
         $template = new Table\Templates([
-            'parent_id' => ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null),
+            'parent_id' => ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ?
+                (int)$fields['template_parent_id'] : null),
             'name'      => $fields['name'],
-            'device'    => $fields['device'],
-            'template'  => $fields['template_source']
+            'device'    => ((isset($fields['device']) && ($fields['device'] != '----')) ? $fields['device'] : null),
+            'template'  => (isset($fields['template_source']) ? $fields['template_source'] : null),
+            'history'   => null
         ]);
         $template->save();
 
@@ -78,20 +77,90 @@ class Template extends AbstractModel
      * Update an existing template
      *
      * @param  array $fields
+     * @param  int   $historyLimit
      * @return void
      */
-    public function update(array $fields)
+    public function update(array $fields, $historyLimit)
     {
         $template = Table\Templates::findById((int)$fields['id']);
         if (isset($template->id)) {
+            if ($fields['template_source'] != $template->template) {
+                if (null !== $template->history) {
+                    $history = json_decode($template->history, true);
+                    $history[time()] = $template->template;
+                    if (count($history) > $historyLimit) {
+                        $history = array_slice($history, 1, $historyLimit, true);
+                    }
+                    $templateHistory = json_encode($history);
+                } else {
+                    $templateHistory = json_encode([time() => $template->template]);
+                }
+            } else {
+                $templateHistory = $template->history;
+            }
 
-            $template->parent_id = ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ? (int)$fields['template_parent_id'] : null);
+
+            $template->parent_id = ((isset($fields['template_parent_id']) && ($fields['template_parent_id'] != '----')) ?
+                (int)$fields['template_parent_id'] : null);
             $template->name      = $fields['name'];
-            $template->device    = $fields['device'];
-            $template->template  = $fields['template_source'];
+            $template->device    = ((isset($fields['device']) && ($fields['device'] != '----')) ? $fields['device'] : null);
+            $template->template  = (isset($fields['template_source']) ? $fields['template_source'] : null);
+            $template->history   = $templateHistory;
             $template->save();
 
             $this->data = array_merge($this->data, $template->getColumns());
+        }
+    }
+
+    /**
+     * Copy template
+     *
+     * @param  boolean $fields
+     * @return void
+     */
+    public function copy($fields = false)
+    {
+        $oldId    = (int)$this->data['id'];
+        $template = Table\Templates::findById($oldId);
+
+        if (isset($template->id)) {
+            $i    = 1;
+            $name = $template->name . ' (Copy ' . $i . ')';
+
+            $dupeTemplate = Table\Templates::findBy(['name' => $name]);
+
+            while (isset($dupeTemplate->id)) {
+                $i++;
+                $name = $template->name . ' (Copy ' . $i . ')';
+                $dupeTemplate = Table\Templates::findBy(['name' => $name]);
+            }
+
+            $newTemplate = new Table\Templates([
+                'parent_id' => $template->parent_id,
+                'name'      => $name,
+                'device'    => null,
+                'template'  => $template->template,
+                'history'   => $template->history
+            ]);
+            $newTemplate->save();
+
+            if ($fields) {
+                $fv = \Fields\Table\FieldValues::findBy(['model_id' => $oldId]);
+                if ($fv->count() > 0) {
+                    foreach ($fv->rows() as $value) {
+                        $v = new \Fields\Table\FieldValues([
+                            'field_id'  => $value->field_id,
+                            'model_id'  => $newTemplate->id,
+                            'value'     => $value->value,
+                            'timestamp' => time(),
+                            'history'   => $value->history
+                        ]);
+                        $v->save();
+                    }
+                }
+            }
+
+            $this->data = array_replace($this->data, $newTemplate->getColumns());
         }
     }
 
