@@ -11,8 +11,6 @@ use Phire\Controller\AbstractController;
 class Template
 {
 
-
-
     /**
      * Bootstrap the module
      *
@@ -91,9 +89,11 @@ class Template
      * Parse the template
      *
      * @param  string $template
+     * @param  mixed  $id
+     * @param  mixed  $pid
      * @return boolean
      */
-    public static function parse($template)
+    public static function parse($template, $id = null, $pid = null)
     {
         // Parse any date placeholders
         $dates = [];
@@ -105,7 +105,27 @@ class Template
             }
         }
 
-        // Parse any session placeholder
+        // Parse any template placeholders
+        $templates = [];
+        preg_match_all('/\[\{template_.*\}\]/', $template, $templates);
+        if (isset($templates[0]) && isset($templates[0][0])) {
+            foreach ($templates[0] as $tmpl) {
+                $t = str_replace('}]', '', substr($tmpl, (strpos($tmpl, '_') + 1)));
+                if (($t != $id) && ($t != $pid)) {
+                    $newTemplate = (is_numeric($t)) ? Table\Templates::findById($t) : Table\Templates::findBy(['name' => $t]);
+                    if (isset($newTemplate->id)) {
+                        $t = self::parse($newTemplate->template, $newTemplate->id, $id);
+                        $template = str_replace($tmpl, $t, $template);
+                    } else {
+                        $template = str_replace($tmpl, '', $template);
+                    }
+                } else {
+                    $template = str_replace($tmpl, '', $template);
+                }
+            }
+        }
+
+        // Parse any session placeholders
         $open  = [];
         $close = [];
         $merge = [];
