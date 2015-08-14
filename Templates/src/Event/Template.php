@@ -42,7 +42,15 @@ class Template
      */
     public static function setTemplate(AbstractController $controller, Application $application)
     {
-        if ($application->isRegistered('Content') &&
+        $template = null;
+
+        if ($application->isRegistered('Categories') &&
+            ($controller instanceof \Categories\Controller\IndexController) && ($controller->hasView())) {
+            $template = Table\Templates::findBy(['name' => 'Category']);
+            if (isset($template->id)) {
+
+            }
+        } else if ($application->isRegistered('Content') &&
             ($controller instanceof \Content\Controller\IndexController) && ($controller->hasView())) {
             if (is_numeric($controller->getTemplate())) {
                 if ($controller->getTemplate() == -1) {
@@ -52,20 +60,23 @@ class Template
                 } else {
                     $template = Table\Templates::findById((int)$controller->getTemplate());
                 }
-                if (isset($template->id)) {
-                    $device = self::getDevice($controller->request()->getQuery('mobile'));
-                    if ((null !== $device) && ($template->device != $device)) {
-                        $childTemplate = Table\Templates::findBy(['parent_id' => $template->id, 'device' => $device]);
-                        if (isset($childTemplate->id)) {
-                            $tmpl = $childTemplate->template;
-                        } else {
-                            $tmpl = $template->template;
-                        }
+            }
+        }
+
+        if ((null !== $template) && isset($template->id)) {
+            if (isset($template->id)) {
+                $device = self::getDevice($controller->request()->getQuery('mobile'));
+                if ((null !== $device) && ($template->device != $device)) {
+                    $childTemplate = Table\Templates::findBy(['parent_id' => $template->id, 'device' => $device]);
+                    if (isset($childTemplate->id)) {
+                        $tmpl = $childTemplate->template;
                     } else {
                         $tmpl = $template->template;
                     }
-                    $controller->view()->setTemplate(self::parse($tmpl));
+                } else {
+                    $tmpl = $template->template;
                 }
+                $controller->view()->setTemplate(self::parse($tmpl));
             }
         }
     }
@@ -79,7 +90,7 @@ class Template
     public static function checkTemplateName($name)
     {
         $templates = [
-            'date', 'error', 'footer', 'header', 'sidebar'
+            'date', 'category', 'error', 'footer', 'header', 'sidebar'
         ];
 
         return (!in_array(strtolower($name), $templates));
