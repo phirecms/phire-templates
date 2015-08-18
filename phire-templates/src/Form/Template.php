@@ -1,10 +1,10 @@
 <?php
 
-namespace Templates\Form;
+namespace Phire\Templates\Form;
 
 use Pop\Form\Form;
 use Pop\Validator;
-use Templates\Table;
+use Phire\Templates\Table;
 
 class Template extends Form
 {

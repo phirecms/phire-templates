@@ -3,7 +3,7 @@
 return [
     APP_URI => [
         '/templates[/]' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'index',
             'acl'        => [
                 'resource'   => 'templates',
@@ -11,7 +11,7 @@ return [
             ]
         ],
         '/templates/add[/]' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'add',
             'acl'        => [
                 'resource'   => 'templates',
@@ -19,7 +19,7 @@ return [
             ]
         ],
         '/templates/copy/:id' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'copy',
             'acl'        => [
                 'resource'   => 'templates',
@@ -27,7 +27,7 @@ return [
             ]
         ],
         '/templates/edit/:id' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'edit',
             'acl'        => [
                 'resource'   => 'templates',
@@ -35,7 +35,7 @@ return [
             ]
         ],
         '/templates/json/:id/:marked' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'json',
             'acl'        => [
                 'resource'   => 'templates',
@@ -43,7 +43,7 @@ return [
             ]
         ],
         '/templates/remove[/]' => [
-            'controller' => 'Templates\Controller\IndexController',
+            'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'remove',
             'acl'        => [
                 'resource'   => 'templates',

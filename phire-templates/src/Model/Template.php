@@ -1,8 +1,8 @@
 <?php
 
-namespace Templates\Model;
+namespace Phire\Templates\Model;
 
-use Templates\Table;
+use Phire\Templates\Table;
 use Phire\Model\AbstractModel;
 
 class Template extends AbstractModel

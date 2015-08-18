@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Templates\Form\Template' => [
+    'Phire\Templates\Form\Template' => [
         [
             'submit' => [
                 'type'       => 'submit',

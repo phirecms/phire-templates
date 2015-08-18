@@ -1,8 +1,8 @@
 <?php
 
-namespace Templates\Event;
+namespace Phire\Templates\Event;
 
-use Templates\Table;
+use Phire\Templates\Table;
 use Pop\Application;
 use Pop\Web\Mobile;
 use Pop\Web\Session;

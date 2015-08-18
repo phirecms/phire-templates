@@ -1,10 +1,10 @@
 <?php
 
-namespace Templates\Controller;
+namespace Phire\Templates\Controller;
 
-use Templates\Model;
-use Templates\Form;
-use Templates\Table;
+use Phire\Templates\Model;
+use Phire\Templates\Form;
+use Phire\Templates\Table;
 use Phire\Controller\AbstractController;
 
 class IndexController extends AbstractController
@@ -36,7 +36,7 @@ class IndexController extends AbstractController
         $this->prepareView('templates/add.phtml');
         $this->view->title = 'Templates : Add';
 
-        $fields = $this->application->config()['forms']['Templates\Form\Template'];
+        $fields = $this->application->config()['forms']['Phire\Templates\Form\Template'];
 
         $templates = Table\Templates::findAll();
         foreach ($templates->rows() as $tmpl) {
@@ -82,7 +82,7 @@ class IndexController extends AbstractController
         $this->view->title         = 'Templates';
         $this->view->template_name = $template->name;
 
-        $fields = $this->application->config()['forms']['Templates\Form\Template'];
+        $fields = $this->application->config()['forms']['Phire\Templates\Form\Template'];
 
         $templates = Table\Templates::findAll();
         foreach ($templates->rows() as $tmpl) {
@@ -124,7 +124,7 @@ class IndexController extends AbstractController
                      ->filter();
                 $template = new Model\Template();
 
-                $template->update($this->view->form->getFields(), $this->application->module('Templates')->config()['history']);
+                $template->update($this->view->form->getFields(), $this->application->module('phire-templates')->config()['history']);
                 $this->view->id = $template->id;
                 $this->redirect(BASE_PATH . APP_URI . '/templates/edit/'. $template->id . '?saved=' . time());
             }

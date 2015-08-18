@@ -1,6 +1,6 @@
 <?php
 
-namespace Templates\Table;
+namespace Phire\Templates\Table;
 
 use Pop\Db\Record;
 
