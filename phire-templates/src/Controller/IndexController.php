@@ -148,7 +148,7 @@ class IndexController extends AbstractController
             $this->redirect(BASE_PATH . APP_URI . '/$templates');
         }
 
-        $template->copy($this->application->modules()->isRegistered('Fields'));
+        $template->copy($this->application->modules()->isRegistered('phire-fields'));
         $this->redirect(BASE_PATH . APP_URI . '/templates?saved=' . time());
     }
 

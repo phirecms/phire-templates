@@ -19,7 +19,7 @@ class Template
      */
     public static function bootstrap(Application $application)
     {
-        if ($application->isRegistered('Content')) {
+        if ($application->isRegistered('phire-content')) {
             $templates = Table\Templates::findBy(['parent_id' => null]);
             if ($templates->hasRows()) {
                 $forms  = $application->config()['forms'];
@@ -44,13 +44,13 @@ class Template
     {
         $template = null;
 
-        if ($application->isRegistered('Categories') &&
+        if ($application->isRegistered('phire-categories') &&
             ($controller instanceof \Categories\Controller\IndexController) && ($controller->hasView())) {
             $template = Table\Templates::findBy(['name' => 'Category']);
             if (isset($template->id)) {
 
             }
-        } else if ($application->isRegistered('Content') &&
+        } else if ($application->isRegistered('phire-content') &&
             ($controller instanceof \Content\Controller\IndexController) && ($controller->hasView())) {
             if (is_numeric($controller->getTemplate())) {
                 if ($controller->getTemplate() == -1) {
