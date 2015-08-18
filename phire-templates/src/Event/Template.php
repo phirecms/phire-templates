@@ -47,9 +47,6 @@ class Template
         if ($application->isRegistered('phire-categories') &&
             ($controller instanceof \Phire\Categories\Controller\IndexController) && ($controller->hasView())) {
             $template = Table\Templates::findBy(['name' => 'Category']);
-            if (isset($template->id)) {
-
-            }
         } else if ($application->isRegistered('phire-content') &&
             ($controller instanceof \Phire\Content\Controller\IndexController) && ($controller->hasView())) {
             if (is_numeric($controller->getTemplate())) {
