@@ -25,7 +25,7 @@ class Template
                 $forms  = $application->config()['forms'];
                 foreach ($templates->rows() as $template) {
                     if (self::checkTemplateName($template->name)) {
-                        $forms['Content\Form\Content'][0]['content_template']['value'][$template->id] = $template->name;
+                        $forms['Phire\Content\Form\Content'][0]['content_template']['value'][$template->id] = $template->name;
                     }
                 }
                 $application->mergeConfig(['forms' => $forms], true);
