@@ -145,10 +145,10 @@ class Template extends AbstractModel
             $newTemplate->save();
 
             if ($fields) {
-                $fv = \Fields\Table\FieldValues::findBy(['model_id' => $oldId]);
+                $fv = \Phire\Fields\Table\FieldValues::findBy(['model_id' => $oldId]);
                 if ($fv->count() > 0) {
                     foreach ($fv->rows() as $value) {
-                        $v = new \Fields\Table\FieldValues([
+                        $v = new \Phire\Fields\Table\FieldValues([
                             'field_id'  => $value->field_id,
                             'model_id'  => $newTemplate->id,
                             'value'     => $value->value,

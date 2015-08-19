@@ -37,7 +37,7 @@ return [
             [
                 'name'     => 'app.send',
                 'action'   => 'Phire\Templates\Event\Template::setTemplate',
-                'priority' => 1000
+                'priority' => 10000
             ]
         ],
         'history' => 10
