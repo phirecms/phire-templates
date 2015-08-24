@@ -79,6 +79,22 @@ class Template
     }
 
     /**
+     * Parse the body
+     *
+     * @param  AbstractController $controller
+     * @param  Application        $application
+     * @return void
+     */
+    public static function parseBody(AbstractController $controller, Application $application)
+    {
+        if (($controller->hasView()) &&
+            (($application->isRegistered('phire-categories') && ($controller instanceof \Phire\Categories\Controller\IndexController)) ||
+             ($application->isRegistered('phire-content') && ($controller instanceof \Phire\Content\Controller\IndexController)))) {
+            $controller->response()->setBody(self::parse($controller->response()->getBody()));
+        }
+    }
+
+    /**
      * Check if the template is allowed
      *
      * @param  string $name
