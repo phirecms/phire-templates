@@ -44,7 +44,10 @@ class Template
     {
         $template = null;
 
-        if ($application->isRegistered('phire-categories') && ($controller instanceof \Phire\Categories\Controller\IndexController) &&
+        if ($application->isRegistered('phire-search') && ($controller instanceof \Phire\Search\Controller\IndexController) &&
+            ($controller->hasView())) {
+            $template = Table\Templates::findBy(['name' => 'Search']);
+        } else if ($application->isRegistered('phire-categories') && ($controller instanceof \Phire\Categories\Controller\IndexController) &&
             ($controller->hasView()) && ($controller->getTemplate() != -1)) {
             if (null !== $controller->view()->category_title) {
                 $template = Table\Templates::findBy(['name' => 'Category ' . $controller->view()->category_title]);
@@ -110,7 +113,7 @@ class Template
     public static function checkTemplateName($name)
     {
         $templates = [
-            'date', 'category', 'error', 'footer', 'header', 'sidebar'
+            'date', 'category', 'error', 'footer', 'header', 'sidebar', 'search'
         ];
 
         return (!in_array(strtolower($name), $templates));
