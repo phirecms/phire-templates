@@ -19,11 +19,11 @@ class Template extends AbstractModel
         $order = (null !== $sort) ? $this->getSortOrder($sort) : 'id ASC';
 
         $templatesAry = [];
-        $templates    = Table\Templates::findBy(['parent_id' => null], null, ['order' => $order]);
+        $templates    = Table\Templates::findBy(['parent_id' => null], ['order' => $order]);
 
         foreach ($templates->rows() as $template) {
             $templatesAry[] = $template;
-            $children = Table\Templates::findBy(['parent_id' => $template->id], null, ['order' => $order]);
+            $children = Table\Templates::findBy(['parent_id' => $template->id], ['order' => $order]);
             foreach ($children->rows() as $child) {
                 $child->name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt; ' . $child->name;
                 $templatesAry[] = $child;
