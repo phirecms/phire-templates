@@ -93,7 +93,8 @@ class IndexController extends AbstractController
 
         if (null !== $template->history) {
             $history = json_decode($template->history, true);
-            $fields[0]['template_history'] = [
+            //$fields[0]['template_history'] = [
+            $tmplHistory = [
                 'type'  => 'select',
                 'label' => 'Select Revision',
                 'value' => [
@@ -105,8 +106,11 @@ class IndexController extends AbstractController
             ];
             krsort($history);
             foreach ($history as $timestamp => $value) {
-                $fields[0]['template_history']['value'][$timestamp] = date('M j, Y H:i:s', $timestamp);
+                $tmplHistory['value'][$timestamp] = date('M j, Y H:i:s', $timestamp);
             }
+            $fields[0] = array_slice($fields[0], 0, 3, true) +
+                ['template_history' => $tmplHistory] +
+                array_slice($fields[0], 3, count($fields[0]) - 3, true);
         }
 
         $fields[1]['name']['attributes']['onkeyup'] = 'phire.changeTitle(this.value);';

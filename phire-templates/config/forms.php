@@ -37,6 +37,16 @@ return [
                 ],
                 'marked' => 'desktop'
             ],
+            'visible' => [
+                'type'  => 'radio',
+                'label' => 'Visible',
+                'value' => [
+                    '1' => 'Yes',
+                    '0' => 'No'
+                ],
+                'marked' => 1
+
+            ],
             'id' => [
                 'type'  => 'hidden',
                 'value' => 0

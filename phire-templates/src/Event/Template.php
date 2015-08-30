@@ -24,7 +24,7 @@ class Template
             if ($templates->hasRows()) {
                 $forms  = $application->config()['forms'];
                 foreach ($templates->rows() as $template) {
-                    if (self::checkTemplateName($template->name)) {
+                    if ((self::checkTemplateName($template->name)) && ($template->visible)) {
                         $forms['Phire\Content\Form\Content'][0]['content_template']['value'][$template->id] = $template->name;
                     }
                 }

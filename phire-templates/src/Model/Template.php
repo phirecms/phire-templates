@@ -66,7 +66,8 @@ class Template extends AbstractModel
             'name'      => $fields['name'],
             'device'    => ((isset($fields['device']) && ($fields['device'] != '----')) ? $fields['device'] : null),
             'template'  => (isset($fields['template_source']) ? $fields['template_source'] : null),
-            'history'   => null
+            'history'   => null,
+            'visible'   => (int)$fields['visible']
         ]);
         $template->save();
 
@@ -106,6 +107,7 @@ class Template extends AbstractModel
             $template->device    = ((isset($fields['device']) && ($fields['device'] != '----')) ? $fields['device'] : null);
             $template->template  = (isset($fields['template_source']) ? $fields['template_source'] : null);
             $template->history   = $templateHistory;
+            $template->visible   = (int)$fields['visible'];
             $template->save();
 
             $this->data = array_merge($this->data, $template->getColumns());

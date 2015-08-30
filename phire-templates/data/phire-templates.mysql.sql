@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `[{prefix}]templates` (
   `device` varchar(255),
   `template` mediumtext,
   `history` mediumtext,
+  `visible` int(1),
   PRIMARY KEY (`id`),
   INDEX `template_parent_id` (`parent_id`),
   INDEX `template_name` (`name`),

@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS "[{prefix}]templates" (
   "device" varchar(255),
   "template" text,
   "history" text,
+  "visible" integer,
   PRIMARY KEY ("id"),
   CONSTRAINT "fk_template_parent_id" FOREIGN KEY ("parent_id") REFERENCES "[{prefix}]templates" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 ) ;
