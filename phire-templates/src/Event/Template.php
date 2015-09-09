@@ -24,7 +24,7 @@ class Template
             if ($templates->hasRows()) {
                 $forms  = $application->config()['forms'];
                 foreach ($templates->rows() as $template) {
-                    if ((self::checkTemplateName($template->name)) && ($template->visible)) {
+                    if ($template->visible) {
                         $forms['Phire\Content\Form\Content'][0]['content_template']['value'][$template->id] = $template->name;
                     }
                 }
@@ -44,20 +44,7 @@ class Template
     {
         $template = null;
 
-        if ($application->isRegistered('phire-search') && ($controller instanceof \Phire\Search\Controller\IndexController) &&
-            ($controller->hasView())) {
-            $template = Table\Templates::findBy(['name' => 'Search']);
-        } else if ($application->isRegistered('phire-categories') && ($controller instanceof \Phire\Categories\Controller\IndexController) &&
-            ($controller->hasView()) && ($controller->getTemplate() != -1)) {
-            if (null !== $controller->view()->category_title) {
-                $template = Table\Templates::findBy(['name' => 'Category ' . $controller->view()->category_title]);
-                if (!isset($template->id)) {
-                    $template = Table\Templates::findBy(['name' => 'Category']);
-                }
-            } else {
-                $template = Table\Templates::findBy(['name' => 'Category']);
-            }
-        } else if ($application->isRegistered('phire-content') &&
+        if ($application->isRegistered('phire-content') &&
             ($controller instanceof \Phire\Content\Controller\IndexController) && ($controller->hasView())) {
             if (is_numeric($controller->getTemplate())) {
                 if ($controller->getTemplate() == -1) {
@@ -102,21 +89,6 @@ class Template
              ($application->isRegistered('phire-content') && ($controller instanceof \Phire\Content\Controller\IndexController)))) {
             $controller->response()->setBody(self::parse($controller->response()->getBody()));
         }
-    }
-
-    /**
-     * Check if the template is allowed
-     *
-     * @param  string $name
-     * @return boolean
-     */
-    public static function checkTemplateName($name)
-    {
-        $templates = [
-            'date', 'category', 'error', 'footer', 'header', 'sidebar', 'search'
-        ];
-
-        return (!in_array(strtolower($name), $templates));
     }
 
     /**
