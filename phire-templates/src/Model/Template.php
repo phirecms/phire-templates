@@ -183,6 +183,7 @@ class Template extends AbstractModel
                         $v = new \Phire\Fields\Table\FieldValues([
                             'field_id'  => $value->field_id,
                             'model_id'  => $newTemplate->id,
+                            'model'     => 'Phire\Templates\Model\Template',
                             'value'     => $value->value,
                             'timestamp' => time(),
                             'history'   => $value->history
