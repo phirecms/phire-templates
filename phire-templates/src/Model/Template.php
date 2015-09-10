@@ -53,6 +53,35 @@ class Template extends AbstractModel
     }
 
     /**
+     * Get template
+     *
+     * @param  mixed $template
+     * @return string
+     */
+    public function getTemplate($template)
+    {
+        $tmpl     = null;
+        $template = (is_numeric($template)) ? Table\Templates::findById($id) : Table\Templates::findBy(['name' => $template]);
+
+        if (isset($template->id)) {
+            $device = \Phire\Templates\Event\Template::getDevice($controller->request()->getQuery('mobile'));
+            if ((null !== $device) && ($template->device != $device)) {
+                $childTemplate = Table\Templates::findBy(['parent_id' => $template->id, 'device' => $device]);
+                if (isset($childTemplate->id)) {
+                    $tmpl = $childTemplate->template;
+                } else {
+                    $tmpl = $template->template;
+                }
+            } else {
+                $tmpl = $template->template;
+            }
+            $tmpl = \Phire\Templates\Event\Template::parse($tmpl);
+        }
+
+        return $tmpl;
+    }
+
+    /**
      * Save new template
      *
      * @param  array $fields

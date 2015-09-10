@@ -2,6 +2,7 @@
 
 namespace Phire\Templates\Event;
 
+use Phire\Templates\Model;
 use Phire\Templates\Table;
 use Pop\Application;
 use Pop\Web\Mobile;
@@ -30,6 +31,21 @@ class Template
                 }
                 $application->mergeConfig(['forms' => $forms], true);
             }
+        }
+    }
+
+    /**
+     * Init template model
+     *
+     * @param  AbstractController $controller
+     * @param  Application        $application
+     * @return void
+     */
+    public static function init(AbstractController $controller, Application $application)
+    {
+        if ($application->isRegistered('phire-content') &&
+            ($controller instanceof \Phire\Content\Controller\IndexController) && ($controller->hasView())) {
+            $controller->view()->phire->template = new Model\Template();
         }
     }
 

@@ -40,6 +40,11 @@ return [
                 'priority' => 10000
             ],
             [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Templates\Event\Template::init',
+                'priority' => 1000
+            ],
+            [
                 'name'     => 'app.send.post',
                 'action'   => 'Phire\Templates\Event\Template::parseBody',
                 'priority' => 10000
