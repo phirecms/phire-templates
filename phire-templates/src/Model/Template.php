@@ -61,10 +61,11 @@ class Template extends AbstractModel
     public function getTemplate($template)
     {
         $tmpl     = null;
-        $template = (is_numeric($template)) ? Table\Templates::findById($id) : Table\Templates::findBy(['name' => $template]);
+        $template = (is_numeric($template)) ? Table\Templates::findById($template) : Table\Templates::findBy(['name' => $template]);
 
         if (isset($template->id)) {
-            $device = \Phire\Templates\Event\Template::getDevice($controller->request()->getQuery('mobile'));
+            $mobile = (isset($_GET['mobile']) ? $_GET['mobile'] : null);
+            $device = \Phire\Templates\Event\Template::getDevice($mobile);
             if ((null !== $device) && ($template->device != $device)) {
                 $childTemplate = Table\Templates::findBy(['parent_id' => $template->id, 'device' => $device]);
                 if (isset($childTemplate->id)) {
