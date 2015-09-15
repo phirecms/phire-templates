@@ -56,7 +56,7 @@ class IndexController extends AbstractController
                 $template = new Model\Template();
                 $template->save($this->view->form->getFields());
                 $this->view->id = $template->id;
-                $this->sess->setRequestValue('saved', true, 1);
+                $this->sess->setRequestValue('saved', true);
                 $this->redirect(BASE_PATH . APP_URI . '/templates/edit/'. $template->id);
             }
         }
@@ -131,7 +131,7 @@ class IndexController extends AbstractController
 
                 $template->update($this->view->form->getFields(), $this->application->module('phire-templates')->config()['history']);
                 $this->view->id = $template->id;
-                $this->sess->setRequestValue('saved', true, 1);
+                $this->sess->setRequestValue('saved', true);
                 $this->redirect(BASE_PATH . APP_URI . '/templates/edit/'. $template->id);
             }
         }
@@ -155,7 +155,7 @@ class IndexController extends AbstractController
         }
 
         $template->copy($this->application->modules()->isRegistered('phire-fields'));
-        $this->sess->setRequestValue('saved', true, 1);
+        $this->sess->setRequestValue('saved', true);
         $this->redirect(BASE_PATH . APP_URI . '/templates');
     }
 
@@ -193,7 +193,7 @@ class IndexController extends AbstractController
             $template = new Model\Template();
             $template->remove($this->request->getPost());
         }
-        $this->sess->setRequestValue('removed', true, 1);
+        $this->sess->setRequestValue('removed', true);
         $this->redirect(BASE_PATH . APP_URI . '/templates');
     }
 
