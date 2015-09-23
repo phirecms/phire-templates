@@ -147,10 +147,10 @@ class Template extends AbstractModel
     /**
      * Copy template
      *
-     * @param  boolean $fields
+     * @param  \Pop\Module\Manager $modules
      * @return void
      */
-    public function copy($fields = false)
+    public function copy(\Pop\Module\Manager $modules)
     {
         $oldId    = (int)$this->data['id'];
         $template = Table\Templates::findById($oldId);
@@ -176,7 +176,7 @@ class Template extends AbstractModel
             ]);
             $newTemplate->save();
 
-            if ($fields) {
+            if ($modules->isRegistered('phire-fields')) {
                 $fv = \Phire\Fields\Table\FieldValues::findBy(['model_id' => $oldId]);
                 if ($fv->count() > 0) {
                     foreach ($fv->rows() as $value) {
@@ -189,6 +189,38 @@ class Template extends AbstractModel
                             'history'   => $value->history
                         ]);
                         $v->save();
+                    }
+                }
+            } else if ($modules->isRegistered('phire-fields-plus')) {
+                $sql = \Phire\FieldsPlus\Table\Fields::sql();
+                $sql->select()->where('models LIKE :models');
+
+                $value  = ($sql->getDbType() == \Pop\Db\Sql::SQLITE) ?
+                    '%' . 'Phire\Templates\Model\Template' . '%' : '%' . addslashes('Phire\Templates\Model\Template') . '%';
+
+                $fields = \Phire\FieldsPlus\Table\Fields::execute((string)$sql, ['models' => $value]);
+                if ($fields->hasRows()) {
+                    foreach ($fields->rows() as $field) {
+                        $record = new \Pop\Db\Record();
+                        $record->setPrefix(DB_PREFIX)
+                            ->setPrimaryKeys(['id'])
+                            ->setTable('fields_plus_' . $field->id);
+
+                        $record->findRecordsBy(['model_id' => $oldId, 'model' => 'Phire\Templates\Model\Template']);
+                        if ($record->hasRows()) {
+                            foreach ($record->rows() as $rec) {
+                                $r = new \Pop\Db\Record([
+                                    'model_id' => $newContent->id,
+                                    'model'     => 'Phire\Templates\Model\Template',
+                                    'timestamp' => time(),
+                                    'value'     => $rec->value
+                                ]);
+                                $r->setPrefix(DB_PREFIX)
+                                    ->setPrimaryKeys(['id'])
+                                    ->setTable('fields_plus_' . $field->id);
+                                $r->save();
+                            }
+                        }
                     }
                 }
             }
