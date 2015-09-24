@@ -204,7 +204,7 @@ class Template extends AbstractModel
                         $record = new \Pop\Db\Record();
                         $record->setPrefix(DB_PREFIX)
                             ->setPrimaryKeys(['id'])
-                            ->setTable('fields_plus_' . $field->id);
+                            ->setTable('fields_plus_' . $field->name);
 
                         $record->findRecordsBy(['model_id' => $oldId, 'model' => 'Phire\Templates\Model\Template']);
                         if ($record->hasRows()) {
@@ -217,7 +217,7 @@ class Template extends AbstractModel
                                 ]);
                                 $r->setPrefix(DB_PREFIX)
                                     ->setPrimaryKeys(['id'])
-                                    ->setTable('fields_plus_' . $field->id);
+                                    ->setTable('fields_plus_' . $field->name);
                                 $r->save();
                             }
                         }
