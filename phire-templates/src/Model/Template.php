@@ -191,38 +191,6 @@ class Template extends AbstractModel
                         $v->save();
                     }
                 }
-            } else if ($modules->isRegistered('phire-fields-plus')) {
-                $sql = \Phire\FieldsPlus\Table\Fields::sql();
-                $sql->select()->where('models LIKE :models');
-
-                $value  = ($sql->getDbType() == \Pop\Db\Sql::SQLITE) ?
-                    '%' . 'Phire\Templates\Model\Template' . '%' : '%' . addslashes('Phire\Templates\Model\Template') . '%';
-
-                $fields = \Phire\FieldsPlus\Table\Fields::execute((string)$sql, ['models' => $value]);
-                if ($fields->hasRows()) {
-                    foreach ($fields->rows() as $field) {
-                        $record = new \Pop\Db\Record();
-                        $record->setPrefix(DB_PREFIX)
-                            ->setPrimaryKeys(['id'])
-                            ->setTable('fields_plus_' . $field->name);
-
-                        $record->findRecordsBy(['model_id' => $oldId, 'model' => 'Phire\Templates\Model\Template']);
-                        if ($record->hasRows()) {
-                            foreach ($record->rows() as $rec) {
-                                $r = new \Pop\Db\Record([
-                                    'model_id' => $newContent->id,
-                                    'model'     => 'Phire\Templates\Model\Template',
-                                    'timestamp' => time(),
-                                    'value'     => $rec->value
-                                ]);
-                                $r->setPrefix(DB_PREFIX)
-                                    ->setPrimaryKeys(['id'])
-                                    ->setTable('fields_plus_' . $field->name);
-                                $r->save();
-                            }
-                        }
-                    }
-                }
             }
 
             $this->data = array_replace($this->data, $newTemplate->getColumns());
