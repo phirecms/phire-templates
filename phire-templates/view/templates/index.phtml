@@ -13,6 +13,7 @@
             <tr>
                 <th><a href="<?=$phireUri . '/templates?sort=id';?>">#</a></th>
                 <th><a href="<?=$phireUri . '/templates?sort=name';?>">Name</a></th>
+                <th><a href="<?=$phireUri . '/templates?sort=visible';?>">Visible</a></th>
                 <th>Device</th>
                 <th class="text-center"><?php if ($acl->isAllowed($user->role, 'templates', 'copy')): ?>Copy<?php else: ?>&nbsp;<?php endif; ?></th>
                 <th class="text-center"><?php if ($acl->isAllowed($user->role, 'templates', 'edit')): ?>Edit<?php else: ?>&nbsp;<?php endif; ?></th>
@@ -23,6 +24,7 @@
             <tr>
                 <td><?=$template->id; ?></td>
                 <td><?=$template->name; ?></td>
+                <td><?=(($template->visible) ? 'Yes' : 'No'); ?></td>
                 <td><?=$template->device; ?></td>
                 <td><?php if ($acl->isAllowed($user->role, 'templates', 'copy')): ?><a class="copy-link" href="<?=$phireUri . '/templates/copy/' . $template->id; ?>">Copy</a><?php else: ?>&nbsp;<?php endif; ?></td>
                 <td><?php if ($acl->isAllowed($user->role, 'templates', 'edit')): ?><a class="edit-link" href="<?=$phireUri . '/templates/edit/' . $template->id; ?>">Edit</a><?php else: ?>&nbsp;<?php endif; ?></td>
