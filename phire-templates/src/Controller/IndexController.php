@@ -27,6 +27,22 @@ class IndexController extends AbstractController
     }
 
     /**
+     * Upload action method
+     *
+     * @return void
+     */
+    public function upload()
+    {
+        if (($_FILES) && !empty($_FILES['upload_template']) && !empty($_FILES['upload_template']['name'])) {
+            $template = new Model\Template();
+            $template->upload($_FILES['upload_template']);
+            $this->sess->setRequestValue('saved', true);
+        }
+
+        $this->redirect(BASE_PATH . APP_URI . '/templates');
+    }
+
+    /**
      * Add action method
      *
      * @return void

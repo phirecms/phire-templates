@@ -4,6 +4,9 @@ namespace Phire\Templates\Model;
 
 use Phire\Templates\Table;
 use Phire\Model\AbstractModel;
+use Pop\Archive\Archive;
+use Pop\File\Dir;
+use Pop\File\Upload;
 
 class Template extends AbstractModel
 {
@@ -80,6 +83,79 @@ class Template extends AbstractModel
         }
 
         return $tmpl;
+    }
+
+    /**
+     * Upload template
+     *
+     * @param  array $file
+     * @return void
+     */
+    public function upload($file)
+    {
+        $templatePath = $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/templates';
+        if (!file_exists($templatePath)) {
+            mkdir($templatePath);
+            chmod($templatePath, 0777);
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/index.html')) {
+                copy(
+                    $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/index.html',
+                    $templatePath . '/index.html'
+                );
+                chmod($templatePath . '/index.html', 0777);
+            }
+        }
+
+        $upload   = new Upload($templatePath);
+        $template = $upload->upload($file);
+
+        $formats = Archive::getFormats();
+
+        if (file_exists($templatePath . '/' . $template)) {
+            $ext  = null;
+            $name = null;
+            if (substr($template, -4) == '.zip') {
+                $ext  = 'zip';
+                $name = substr($template, 0, -4);
+            } else if (substr($template, -4) == '.tgz') {
+                $ext  = 'tgz';
+                $name = substr($template, 0, -4);
+            } else if (substr($template, -7) == '.tar.gz') {
+                $ext  = 'tar.gz';
+                $name = substr($template, 0, -7);
+            }
+
+            if ((null !== $ext) && (null !== $name) && array_key_exists($ext, $formats)) {
+                $archive = new Archive($templatePath . '/' . $template);
+                $archive->extract($templatePath);
+                if ((stripos($template, 'gz') !== false) && (file_exists($templatePath . '/' . $name . '.tar'))) {
+                    unlink($templatePath . '/' . $name . '.tar');
+                }
+
+                if (file_exists($templatePath . '/' . $name)) {
+                    $dir = new Dir($templatePath . '/' . $name, ['filesOnly' => true]);
+                    foreach ($dir->getFiles() as $file) {
+                        if (substr($file, -5) == '.html') {
+                            $isVisible = ((stripos($file, 'category') === false) &&
+                                (stripos($file, 'error') === false) &&
+                                (stripos($file, 'tag') === false) &&
+                                (stripos($file, 'header') === false) &&
+                                (stripos($file, 'footer') === false)
+                            );
+                            $template  = new Table\Templates([
+                                'parent_id' => null,
+                                'name'      => substr($file, 0, -5),
+                                'device'    => 'desktop',
+                                'template'  => file_get_contents($templatePath . '/' . $name . '/' . $file),
+                                'history'   => null,
+                                'visible'   => (int)$isVisible
+                            ]);
+                            $template->save();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

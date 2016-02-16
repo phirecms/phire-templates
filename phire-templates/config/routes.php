@@ -18,6 +18,14 @@ return [
                 'permission' => 'add'
             ]
         ],
+        '/templates/upload[/]' => [
+            'controller' => 'Phire\Templates\Controller\IndexController',
+            'action'     => 'upload',
+            'acl'        => [
+                'resource'   => 'templates',
+                'permission' => 'upload'
+            ]
+        ],
         '/templates/copy/:id' => [
             'controller' => 'Phire\Templates\Controller\IndexController',
             'action'     => 'copy',

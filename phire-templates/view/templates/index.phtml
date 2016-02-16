@@ -1,4 +1,10 @@
 <?php include $phireHeader; ?>
+<?php if ($acl->isAllowed($user->role, 'templates', 'upload')): ?>
+    <form id="asset-upload-form" action="<?=$phireUri . '/templates/upload'; ?>" method="post" enctype="multipart/form-data">
+        <div><input tabindex="2" type="submit" id="submit" value="Upload" /></div>
+        <div><input tabindex="1" type="file" name="upload_template" id="upload_template" required="required" value="" size="25" /></div>
+    </form>
+<?php endif; ?>
     <h1 class="templates-header"><?=$title; ?></h1>
 <?php if (count($templates) > 0): ?>
 <?php if ($acl->isAllowed($user->role, 'templates', 'add')): ?>

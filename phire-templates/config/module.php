@@ -28,6 +28,12 @@ return [
         'models' => [
             'Phire\Templates\Model\Template' => []
         ],
+        'uninstall' => function() {
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/templates')) {
+                $dir = new \Pop\File\Dir($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/templates');
+                $dir->emptyDir(true);
+            }
+        },
         'events' => [
             [
                 'name'     => 'app.route.pre',

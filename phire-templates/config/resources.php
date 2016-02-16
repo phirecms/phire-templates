@@ -6,6 +6,7 @@ return [
         'add',
         'edit',
         'copy',
+        'upload',
         'remove'
     ]
 ];
