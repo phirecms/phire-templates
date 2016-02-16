@@ -139,6 +139,7 @@ class Template extends AbstractModel
                             $isVisible = ((stripos($file, 'category') === false) &&
                                 (stripos($file, 'error') === false) &&
                                 (stripos($file, 'tag') === false) &&
+                                (stripos($file, 'search') === false) &&
                                 (stripos($file, 'header') === false) &&
                                 (stripos($file, 'footer') === false)
                             );
