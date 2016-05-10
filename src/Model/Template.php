@@ -140,6 +140,7 @@ class Template extends AbstractModel
                                 (stripos($file, 'error') === false) &&
                                 (stripos($file, 'tag') === false) &&
                                 (stripos($file, 'search') === false) &&
+                                (stripos($file, 'sidebar') === false) &&
                                 (stripos($file, 'header') === false) &&
                                 (stripos($file, 'footer') === false)
                             );
