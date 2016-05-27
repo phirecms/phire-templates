@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-templates resources
+ */
 return [
     'templates' => [
         'index',

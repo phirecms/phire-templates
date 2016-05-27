@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-templates routes
+ */
 return [
     APP_URI => [
         '/templates[/]' => [

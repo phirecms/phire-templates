@@ -1,5 +1,16 @@
 <?php
+/**
+ * Phire Templates Module
+ *
+ * @link       https://github.com/phirecms/phire-templates
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Templates\Event;
 
 use Phire\Templates\Model;
@@ -9,6 +20,16 @@ use Pop\Web\Mobile;
 use Pop\Web\Session;
 use Phire\Controller\AbstractController;
 
+/**
+ * Templates Event class
+ *
+ * @category   Phire\Templates
+ * @package    Phire\Templates
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class Template
 {
 

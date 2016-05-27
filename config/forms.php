@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-templates form configuration
+ */
 return [
     'Phire\Templates\Form\Template' => [
         [

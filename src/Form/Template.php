@@ -1,11 +1,32 @@
 <?php
+/**
+ * Phire Templates Module
+ *
+ * @link       https://github.com/phirecms/phire-templates
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Templates\Form;
 
 use Pop\Form\Form;
 use Pop\Validator;
 use Phire\Templates\Table;
 
+/**
+ * Template Form class
+ *
+ * @category   Phire\Templates
+ * @package    Phire\Templates
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class Template extends Form
 {
 
