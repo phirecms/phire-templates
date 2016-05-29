@@ -167,7 +167,7 @@ class Template extends AbstractModel
                             );
                             $template  = new Table\Templates([
                                 'parent_id' => null,
-                                'name'      => substr($file, 0, -5),
+                                'name'      => ucwords(str_replace(['-', '_'], [' ', ' '], substr($file, 0, -5))),
                                 'device'    => 'desktop',
                                 'template'  => file_get_contents($templatePath . '/' . $name . '/' . $file),
                                 'history'   => null,
